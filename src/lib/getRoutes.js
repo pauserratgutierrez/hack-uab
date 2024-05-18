@@ -1,37 +1,58 @@
 import { getMatrix } from './mapsAPI.js';
-
-var lots = [[[],[],[],[]],[[],[],[],[]],[[],[],[],[]]];
-
-//afegir funcio per cardar dades a lots
+import { getMunicipisByLotsAndBlocsDB } from './database/dbUtils.js';
 
 const workingHours = 8;
 const restingHours = 1;
 const marginHours = 0.5;
 
-const truckVel = 60; // m/h
+const truckVel = 60; // km/h
 
-const startingPoints = ["Girona", "Barcelona", "Tarragona"];
+// posar mitjana de temps
 
-const computeRoute = async (lots, i, j, k, visited, startingPoint, currentPoint, currentTime, workingHours, restingHours, marginHours, truckVel, path, acabar) => {
-    const distanceInfo = await getMatrix([currentPoint], [startingPoint]);
-    if (currentTime + distanceInfo.distance/truckVel > workingHours - restingHours - marginHours) { // afegir counter que comprovi quants queden
+const startingPoints = ["Barcelona centre", "Girona centre", "Tarragona centre"];
+
+const numLots = [2, 4, 5];
+
+let count = 0; //esborrar
+        
+const carregaLots = async () => {
+    const lots = [];
+    for (let i = 0; i < numLots.length; ++i) {
+        lots.push([]);
+        for (let j = 1; j <= 4; ++j) {
+            const mun = await getMunicipisByLotsAndBlocsDB(numLots[i], j);
+            lots[i].push(mun);
+        }
+    }
+    return lots;
+};
+
+const mock = (origins, destinations) => {
+    return Math.random();
+};
+
+//afegir funcio per cardar dades a lots
+
+const computeRoute = (i, j, notVisited, startingPoint, currentPoint, currentTime, workingHours, restingHours, marginHours, truckVel, path, abort) => {
+    const distanceInfo = mock([currentPoint], [startingPoint]);
+    if (currentTime + distanceInfo.distance/truckVel > workingHours - restingHours - marginHours || notVisited.size == 0) { // afegir counter que comprovi quants queden
         acabar = true;
         return;
     }
+    
+    const nearby = lots[i][j];
+    
+    for (let l = 0; l < nearby.length; ++l) {
+        if (notVisited.has(nearby[l].municipiInfo)){
 
-    const currentPoint = path[path.length - 1];
-    const nearby = getNearbyCities(currentPoint);
-
-    for (let l = 0; l < visited; ++l) {
-        if (!visited[l]){
-
-            const time = await getMatrix([currentPoint], [lots[i][j][l]]).distance/truckVel + getTime(currentPoint);
+            const distanceInfo = mock([currentPoint], [nearby[l].municipiInfo])
+            const time = parseFloat(distanceInfo.distance/truckVel) + getTime(currentPoint);
             if (time <= workingHours) {
-                visited[l] = true;
-                path.push(lots[i][j][l]);
-                computeRoute(lots, i, j, k, visited, startingPoint, currentTime + time, workingHours, restingHours, marginHours, truckVel, path, visited, acabar);
+                notVisited.delete(nearby[l].municipiInfo);
+                path.push(nearby[l].municipiInfo);
+                computeRoute(i, j, notVisited, startingPoint, nearby[l].municipiInfo, currentTime + time, workingHours, restingHours, marginHours, truckVel, path, abort);
                 if (acabar) return;
-                visited[l] = false;
+                notVisited.add(nearby[l].municipiInfo);
                 path.pop();
             }
         }
@@ -39,7 +60,7 @@ const computeRoute = async (lots, i, j, k, visited, startingPoint, currentPoint,
     return path;
 }
 
-const getRoutes = async (lots, startingPoints, workingHours, restingHours, marginHours, truckVel) => {
+const getRoutes = (lots, startingPoints, workingHours, restingHours, marginHours, truckVel) => {
     const routes = [];
     for (let i = 0; i < lots.length; ++i) {
         //recorrer cada lot
@@ -48,19 +69,26 @@ const getRoutes = async (lots, startingPoints, workingHours, restingHours, margi
             //recorrer cada bloc 
             routes[i].push([]);
             //make an array size 5 initialized to false
-            const visited = new Array(lots[i][j].length).fill(false);
+            const notVisited = new Set().add(lots[i][j]);
+            console.log("notVisited", notVisited);
 
             for (let k = 0; k < 5; ++k) {
                 const path = [];
-                let acabar = false;
-                const visited = new Array(nearby.length).fill(false);
-                computeRoute(lots, i, j, k, visited, startingPoints[i], 0, workingHours, restingHours, marginHours, truckVel, path, visited, acabar);  
+                let abort = false;
+                computeRoute(i, j, notVisited, startingPoints[i], startingPoints[i], 0, workingHours, restingHours, marginHours, truckVel, path, abort);  
+                console.log("path", path[0]);
                 routes[i][j].push(path);
             }
         }
     }
-
+    return routes;
 }
+
+
+const lots = await carregaLots();
+console.log(lots);
+const result = getRoutes(lots, startingPoints, workingHours, restingHours, marginHours, truckVel);  
+
 
 
     // for (let i = 0; i < lots.length; ++i) {
