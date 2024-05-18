@@ -29,8 +29,8 @@ export async function distanceMatrix(origins, destinations) {
   return response.data;
 };
 
-const origins = ['Breda', 'Madrid'];
-const destinations = ['Valencia', 'Sevilla'];
+const origins = ['Pau, Alt Empordà'];
+const destinations = ['Sant Celoni, Barcelona'];
 
 (async () => {
   const response = await distanceMatrix(origins, destinations);
@@ -38,7 +38,7 @@ const destinations = ['Valencia', 'Sevilla'];
 
   rows.forEach((row, i) => {
     row.elements.forEach((element, j) => {
-      console.log(`${origins[i]} -> ${destinations[j]}: Distance: ${element.distance.text}, Duration: ${element.duration.text}`);
+      console.log(element, j);
     });
   });
 })();
