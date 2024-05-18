@@ -6,7 +6,7 @@ const workingHours = 8;
 const restingHours = 1;
 const marginHours = 0.5;
 
-const truckVel = 60; // km/h
+const truckVel = 60_000; // m/h
 
 const startingPoints = ["Girona", "Barcelona", "Tarragona"];
 
