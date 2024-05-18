@@ -51,15 +51,47 @@ export async function getMunicipiGeoDB(municipiId) {
 };
 
 // Get all the municipis geopoints ordered by distance from a given municipi id
-export async function getMunicipisGeoOrderedByDistanceDB(municipiId) {
-  const query = `SELECT municipi_id, ST_AsText(geopoint) AS geopoint FROM municipis_geo ORDER BY ST_Distance(geopoint, (SELECT geopoint FROM municipis_geo WHERE municipi_id = ?));`;
-  const result = await connection.query(query, [municipiId]);
-  if (result === 0) return null;
+// export async function getMunicipisGeoOrderedByDistanceDB(municipiId) {
+//   const query = `SELECT municipi_id, ST_AsText(geopoint) AS geopoint FROM municipis_geo ORDER BY ST_Distance(geopoint, (SELECT geopoint FROM municipis_geo WHERE municipi_id = ?));`;
+//   const result = await connection.query(query, [municipiId]);
+//   if (result === 0) return null;
 
-  const data = [];
-  for (const row of result[0]) {
-    const [latitude, longitude] = row.geopoint.replace('POINT(', '').replace(')', '').split(' ').map(Number);
-    data.push({ municipiId: row.municipi_id, latitude, longitude });
-  };
-  return data;
+//   const data = [];
+//   for (const row of result[0]) {
+//     const [latitude, longitude] = row.geopoint.replace('POINT(', '').replace(')', '').split(' ').map(Number);
+//     data.push({ municipiId: row.municipi_id, latitude, longitude });
+//   };
+//   return data;
+// };
+export async function getMunicipisGeoOrderedByDistanceDB(municipiId) {
+  const query = `
+    SELECT 
+      municipi_id, 
+      ST_AsText(geopoint) AS geopoint,
+      ST_Distance_Sphere(geopoint, (SELECT geopoint FROM municipis_geo WHERE municipi_id = ?)) AS distance
+    FROM 
+      municipis_geo
+    ORDER BY 
+      distance;
+  `;
+  
+  try {
+    const [rows] = await connection.query(query, [municipiId]);
+    if (rows.length === 0) return null;
+  
+    const data = rows.map(row => {
+      const [longitude, latitude] = row.geopoint.replace('POINT(', '').replace(')', '').split(' ').map(Number);
+      return {
+        municipiId: row.municipi_id,
+        latitude,
+        longitude,
+        distance: row.distance
+      };
+    });
+    
+    return data;
+  } catch (error) {
+    console.error("Error querying the database:", error);
+    throw error;
+  }
 };
