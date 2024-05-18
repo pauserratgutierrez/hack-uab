@@ -13,7 +13,7 @@ const startingPoints = ["Barcelona centre", "Girona centre", "Tarragona centre"]
 
 const numLots = [2, 4, 5];
 
-let count = 0; //esborrar
+let abort = false; //esborrar
         
 const carregaLots = async () => {
     const lots = [];
@@ -28,36 +28,41 @@ const carregaLots = async () => {
 };
 
 const mock = (origins, destinations) => {
-    return Math.random();
+    const distance = Math.random()*200;
+    return { distance };
 };
+
+const getTime = (currentPoint) => {
+    return Math.random()*10;
+}
 
 //afegir funcio per cardar dades a lots
 
-const computeRoute = (i, j, notVisited, startingPoint, currentPoint, currentTime, workingHours, restingHours, marginHours, truckVel, path, abort) => {
+const computeRoute = (i, j, notVisited, startingPoint, currentPoint, currentTime, workingHours, restingHours, marginHours, truckVel, path) => {
     const distanceInfo = mock([currentPoint], [startingPoint]);
-    if (currentTime + distanceInfo.distance/truckVel > workingHours - restingHours - marginHours || notVisited.size == 0) { // afegir counter que comprovi quants queden
-        acabar = true;
+    if (notVisited.size == 0 || currentTime + distanceInfo.distance/truckVel > workingHours - restingHours - marginHours) {
+        abort = true;
         return;
     }
     
     const nearby = lots[i][j];
+    console.log("notVisited", notVisited);
     
     for (let l = 0; l < nearby.length; ++l) {
         if (notVisited.has(nearby[l].municipiInfo)){
 
             const distanceInfo = mock([currentPoint], [nearby[l].municipiInfo])
-            const time = parseFloat(distanceInfo.distance/truckVel) + getTime(currentPoint);
-            if (time <= workingHours) {
-                notVisited.delete(nearby[l].municipiInfo);
-                path.push(nearby[l].municipiInfo);
-                computeRoute(i, j, notVisited, startingPoint, nearby[l].municipiInfo, currentTime + time, workingHours, restingHours, marginHours, truckVel, path, abort);
-                if (acabar) return;
-                notVisited.add(nearby[l].municipiInfo);
-                path.pop();
-            }
+            const time = parseFloat(distanceInfo.distance/truckVel + getTime(currentPoint));
+            console.log("time", time);
+            
+            notVisited.delete(nearby[l].municipiInfo);
+            path.push(nearby[l].municipiInfo);
+            computeRoute(i, j, notVisited, startingPoint, nearby[l].municipiInfo, currentTime + time, workingHours, restingHours, marginHours, truckVel, path);
+            if (abort) return;
+            notVisited.add(nearby[l].municipiInfo);
+            path.pop();
         }
     }
-    return path;
 }
 
 const getRoutes = (lots, startingPoints, workingHours, restingHours, marginHours, truckVel) => {
@@ -69,14 +74,16 @@ const getRoutes = (lots, startingPoints, workingHours, restingHours, marginHours
             //recorrer cada bloc 
             routes[i].push([]);
             //make an array size 5 initialized to false
-            const notVisited = new Set().add(lots[i][j]);
+            const notVisited = new Set();
+            for(let k = 0; k < lots[i][j].length; ++k) {
+                notVisited.add(lots[i][j][k].municipiInfo);
+            }
             console.log("notVisited", notVisited);
 
             for (let k = 0; k < 5; ++k) {
                 const path = [];
-                let abort = false;
-                computeRoute(i, j, notVisited, startingPoints[i], startingPoints[i], 0, workingHours, restingHours, marginHours, truckVel, path, abort);  
-                console.log("path", path[0]);
+                abort = false;
+                computeRoute(i, j, notVisited, startingPoints[i], startingPoints[i], 0, workingHours, restingHours, marginHours, truckVel, path);  
                 routes[i][j].push(path);
             }
         }
@@ -86,8 +93,8 @@ const getRoutes = (lots, startingPoints, workingHours, restingHours, marginHours
 
 
 const lots = await carregaLots();
-console.log(lots);
 const result = getRoutes(lots, startingPoints, workingHours, restingHours, marginHours, truckVel);  
+console.log(result);
 
 
 
