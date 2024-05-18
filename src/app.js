@@ -9,8 +9,12 @@ const truckVel = 60; // km/h
 
 const startingPoints = ["Girona", "Barcelona", "Tarragona"];
 
-const computeRoute = (lots, i, j, k, visited, startingPoint, currentPoint, currentTime, workingHours, restingHours, marginHours, truckVel, path) => {
-    if (currentTime + getDistance(currentPoint, startingPoint)/truckVel > workingHours - restingHours - marginHours) return;
+const computeRoute = (lots, i, j, k, visited, startingPoint, currentPoint, currentTime, workingHours, restingHours, marginHours, truckVel, path, acabar) => {
+    
+    if (currentTime + getDistance(currentPoint, startingPoint)/truckVel > workingHours - restingHours - marginHours) {
+        acabar = true;
+        return;
+    }
 
     const currentPoint = path[path.length - 1];
     const nearby = getNearbyCities(currentPoint);
@@ -23,7 +27,8 @@ const computeRoute = (lots, i, j, k, visited, startingPoint, currentPoint, curre
             if (time <= workingHours) {
                 visited[l] = true;
                 path.push(lots[i][j][l]);
-                computeRoute(lots, i, j, k, visited, startingPoint, currentTime + time, workingHours, restingHours, marginHours, truckVel, path);
+                computeRoute(lots, i, j, k, visited, startingPoint, currentTime + time, workingHours, restingHours, marginHours, truckVel, path, acabar);
+                if (acabar) return;
                 visited[l] = false;
                 path.pop();
             }
