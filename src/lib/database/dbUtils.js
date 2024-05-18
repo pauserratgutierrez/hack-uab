@@ -66,7 +66,7 @@ export async function getMunicipisGeoOrderedByDistanceDB(municipiId, lotNum, blo
   const data = [];
   for (const row of result[0]) {
     const [latitude, longitude] = row.geopoint.replace('POINT(', '').replace(')', '').split(' ').map(Number);
-    data.push({ municipiId: row.municipi_id, latitude, longitude });
+    data.push({ municipiId: row.id, municipiInfo: `${row.municipi}, ${row.comarca}`, latitude, longitude });
   };
   return data;
 };
