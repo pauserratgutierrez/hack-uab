@@ -63,6 +63,3 @@ export async function getMunicipisGeoOrderedByDistanceDB(municipiId) {
   };
   return data;
 };
-
-const orderedMunicipis = await getMunicipisGeoOrderedByDistanceDB(52);
-console.log(orderedMunicipis);
