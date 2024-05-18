@@ -29,7 +29,7 @@ export async function getMatrix(origins, destinations) {
   const result = response.data;
   if (result.status === 'OK') {
     const { distance, duration } = result.rows[0].elements[0];
-    return { distance, duration };
+    return { distance, duration }; // distance in meters, duration in seconds
   } else {
     return null;
   };

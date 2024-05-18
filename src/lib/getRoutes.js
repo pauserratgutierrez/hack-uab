@@ -11,15 +11,14 @@ const truckVel = 60; // km/h
 const startingPoints = ["Girona", "Barcelona", "Tarragona"];
 
 const computeRoute = (lots, i, j, k, visited, startingPoint, currentPoint, currentTime, workingHours, restingHours, marginHours, truckVel, path, acabar) => {
-    
-    if (currentTime + getDistance(currentPoint, startingPoint)/truckVel > workingHours - restingHours - marginHours) { // afegir counter que comprovi quants queden
+    const distanceInfo = getMatrix([currentPoint], [startingPoint]);
+    if (currentTime + distanceInfo.distance/truckVel > workingHours - restingHours - marginHours) { // afegir counter que comprovi quants queden
         acabar = true;
         return;
     }
 
     const currentPoint = path[path.length - 1];
     const nearby = getNearbyCities(currentPoint);
-    const visited = new Array(nearby.length).fill(false);
 
     for (let l = 0; l < visited; ++l) {
         if (!visited[l]){
@@ -27,7 +26,7 @@ const computeRoute = (lots, i, j, k, visited, startingPoint, currentPoint, curre
             if (time <= workingHours) {
                 visited[l] = true;
                 path.push(lots[i][j][l]);
-                computeRoute(lots, i, j, k, visited, startingPoint, currentTime + time, workingHours, restingHours, marginHours, truckVel, path, acabar);
+                computeRoute(lots, i, j, k, visited, startingPoint, currentTime + time, workingHours, restingHours, marginHours, truckVel, path, visited, acabar);
                 if (acabar) return;
                 visited[l] = false;
                 path.pop();
@@ -51,7 +50,9 @@ const getRoutes = async (lots, startingPoints, workingHours, restingHours, margi
 
             for (let k = 0; k < 5; ++k) {
                 const path = [];
-                computeRoute(lots, i, j, k, visited, startingPoints[i], 0, workingHours, restingHours, marginHours, truckVel, path);  
+                let acabar = false;
+                const visited = new Array(nearby.length).fill(false);
+                computeRoute(lots, i, j, k, visited, startingPoints[i], 0, workingHours, restingHours, marginHours, truckVel, path, visited, acabar);  
                 routes[i][j].push(path);
             }
         }
