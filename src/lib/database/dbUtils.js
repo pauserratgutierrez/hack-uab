@@ -1,5 +1,21 @@
 import { connection } from './dbConn.js';
 
+// Search in municipis where bloc = -1
+export async function getStartingPointsDB() {
+  const result = await connection.query('SELECT municipi_id, municipi, comarca FROM municipis WHERE bloc = -1;');
+  if (result === 0) return null;
+
+  const data = [];
+  for (const row of result[0]) {
+    const municipiId = row.municipi_id;
+    const municipiInfo = `${row.municipi}, ${row.comarca}`;
+    const estanciaMin = parseTime(row.estancia_min); 
+    const pobTotalNum = row.pob_total_num;
+    data.push({ municipiId, municipiInfo, estanciaMin, pobTotalNum });
+  };
+  return data;
+};
+
 export async function getMunicipisFormatedDB() {
   const result = await connection.query(`SELECT id, municipi, comarca FROM municipis;`);
   if (result === 0) return null;
@@ -51,51 +67,7 @@ export async function getMunicipiGeoDB(municipiId) {
 
 // Ordenar tots els municipis d'un lot i bloc determinat per distància mitjançant municipis_geo que conté les coords lat i long
 // Get all the municipis geopoints ordered by distance from a given municipi id, joining the municipis table to retrieve WHERE lot and bloc
-export async function getMunicipisGeoOrderedByDistanceDB(municipiId, blocNum) {
-  // SET @given_municipi_id = 1; -- Replace with the actual municipi id
-
-  // -- Get the geopoint of the given municipi
-  // SELECT @given_geopoint := geopoint FROM municipis_geo WHERE municipi_id = @given_municipi_id;
-  
-  // -- Query to get all municipis ordered by distance from the given municipi, within the same lot and bloc
-  // SELECT m.id, m.lot, m.bloc, m.comarca, m.codi_ine, m.municipi, m.pob_total_num, m.estancia_min,
-  //   ST_Distance_Sphere(geo.geopoint, @given_geopoint) AS distance
-  // FROM municipis m
-  // JOIN municipis_geo geo ON m.id = geo.municipi_id
-  // WHERE m.lot = (SELECT lot FROM municipis WHERE id = @given_municipi_id)
-  //   AND m.bloc = (SELECT bloc FROM municipis WHERE id = @given_municipi_id)
-  // ORDER BY distance;
-
-  // 2ND VEWRSION --------------
-  // -- Replace 1 with the actual municipi id
-  // SELECT 
-  //   m.id, 
-  //   m.lot, 
-  //   m.bloc, 
-  //   m.comarca, 
-  //   m.codi_ine, 
-  //   m.municipi, 
-  //   m.pob_total_num, 
-  //   m.estancia_min,
-  //   ST_Distance_Sphere(geo.geopoint, gm.geopoint) AS distance
-  // FROM 
-  //   municipis m
-  // JOIN 
-  //   municipis_geo geo 
-  // ON 
-  //   m.id = geo.municipi_id
-  // JOIN 
-  //   (SELECT lot, bloc, geopoint 
-  //    FROM municipis m 
-  //    JOIN municipis_geo geo 
-  //    ON m.id = geo.municipi_id 
-  //    WHERE m.id = 1) gm
-  // ON 
-  //   m.lot = gm.lot 
-  //   AND m.bloc = gm.bloc
-  // ORDER BY 
-  //   distance;
-  
+export async function getMunicipisGeoOrderedByDistanceDB(municipiId, blocNum) {  
   const query = `
     SELECT m.id, m.lot, m.bloc, m.comarca, m.codi_ine, m.municipi, m.pob_total_num, m.estancia_min,
       ST_Distance_Sphere(geo.geopoint, gm.geopoint) AS distance
