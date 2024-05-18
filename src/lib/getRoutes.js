@@ -1,4 +1,5 @@
 import { getMatrix } from './mapsAPI.js';
+import { getMunicipisGeoOrderedByDistanceDB } from './database/dbUtils.js';
 import { getMunicipisByLotsAndBlocsDB } from './database/dbUtils.js';
 
 const workingHours = 8;
@@ -9,11 +10,14 @@ const truckVel = 60; // km/h
 
 // posar mitjana de temps
 
+console.log(await getMunicipisGeoOrderedByDistanceDB(1));
+process.exit(0);
+
 const startingPoints = ["Barcelona centre", "Girona centre", "Tarragona centre"];
 
 const numLots = [2, 4, 5];
 
-let abort = false; //esborrar
+let abort = false;
         
 const carregaLots = async () => {
     const lots = [];
@@ -45,7 +49,7 @@ const computeRoute = (i, j, notVisited, startingPoint, currentPoint, currentTime
         return;
     }
     
-    const nearby = lots[i][j];
+    const nearby = getMunicipisGeoOrderedByDistanceDB(currentPoint.id);
     console.log("notVisited", notVisited);
     
     for (let l = 0; l < nearby.length; ++l) {
@@ -95,56 +99,3 @@ const getRoutes = (lots, startingPoints, workingHours, restingHours, marginHours
 const lots = await carregaLots();
 const result = getRoutes(lots, startingPoints, workingHours, restingHours, marginHours, truckVel);  
 console.log(result);
-
-
-
-    // for (let i = 0; i < lots.length; ++i) {
-    //     //recorrer cada lot
-    //     routes.push([]);
-    //     for (let j = 0; j < lots[i].length; ++j) {
-    //         //recorrer cada bloc
-    //         routes[i].push([]);
-    //         //make an array size 5 initialized to false
-    //         const visited = new Array(lots[i][j].length).fill(false);
-
-    //         for (let k = 0; k < 5; ++k) {
-    //             //recorrer cada dia
-    //             let remainingHours = workingHours - restingHours - marginHours;
-    //             const dist = new Array(lots[i][j].length).fill(Infinity);
-    //             const prev = new Array(lots[i][j].length).fill(-1);
-    //             const pq = new Heap((a, b) => a.priority - b.priority);
-    //             pq.push({priority: 0, content: startingPoints[i], index: -1});
-    //             while(!pq.empty()){
-    //                 const city = pq.pop();
-    //                 if (city.index == -1 || !visited[city.index]) {
-    //                     if(city.index != -1) visited[city.index] = true;
-
-    //                     //canviar
-    //                     let distance = getDistance(currentPoint, lots[i][j][l]);
-    //                     let time = distance / truckVel;
-
-    //                     //recorrer més propers
-    //                     const nearby = getNearbyCities(city.content);
-
-    //                     for (let l = 0; l < 5; ++l) {
-    //                         if (visited[l]) continue;
-    //                         distance = getDistance(currentPoint, lots[i][j][l]);
-    //                         time = distance / truckVel;
-    //                         if (time <= remainingHours) {
-    //                             pq.push({priority: time, content: nearby[l], index: l});
-    //                             prev[l] = city.index;
-    //                         }
-    //                     }
-
-    //                     if (time <= remainingHours && distance <= maxDistance) {
-    //                         routes[i][j][k].push(lots[i][j][l]);
-    //                         visited[l] = true;
-    //                         remainingHours -= time;
-    //                         currentPoint = lots[i][j][l];
-    //                     }
-    //                 } 
-    //             }
-    //             routes[i][j].push(fixArray(prev));
-    //         }
-    //     }
-    // }
