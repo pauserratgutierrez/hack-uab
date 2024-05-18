@@ -28,7 +28,7 @@ export async function getMatrix(origins, destinations) {
 
   const result = response.data;
   if (result.status === 'OK') {
-    const distance = parseFloat(result.rows[0].elements[0].distance)/1000; // distance in km
+    const distance = parseFloat(result.rows[0].elements[0].distance.value/1000); // distance in km
     const { duration } = result.rows[0].elements[0];
     return { distance, duration }; // distance in meters, duration in seconds
   } else {

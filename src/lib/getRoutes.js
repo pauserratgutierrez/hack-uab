@@ -2,6 +2,8 @@ import { getMatrix } from './mapsAPI.js';
 
 var lots = [[[],[],[],[]],[[],[],[],[]],[[],[],[],[]]];
 
+//afegir funcio per cardar dades a lots
+
 const workingHours = 8;
 const restingHours = 1;
 const marginHours = 0.5;
@@ -10,8 +12,8 @@ const truckVel = 60; // m/h
 
 const startingPoints = ["Girona", "Barcelona", "Tarragona"];
 
-const computeRoute = (lots, i, j, k, visited, startingPoint, currentPoint, currentTime, workingHours, restingHours, marginHours, truckVel, path, acabar) => {
-    const distanceInfo = getMatrix([currentPoint], [startingPoint]);
+const computeRoute = async (lots, i, j, k, visited, startingPoint, currentPoint, currentTime, workingHours, restingHours, marginHours, truckVel, path, acabar) => {
+    const distanceInfo = await getMatrix([currentPoint], [startingPoint]);
     if (currentTime + distanceInfo.distance/truckVel > workingHours - restingHours - marginHours) { // afegir counter que comprovi quants queden
         acabar = true;
         return;
@@ -22,7 +24,8 @@ const computeRoute = (lots, i, j, k, visited, startingPoint, currentPoint, curre
 
     for (let l = 0; l < visited; ++l) {
         if (!visited[l]){
-            const time = getMatrix([currentPoint, lots[i][j][l]).duration + getTime(currentPoint);
+
+            const time = await getMatrix([currentPoint], [lots[i][j][l]]).distance/truckVel + getTime(currentPoint);
             if (time <= workingHours) {
                 visited[l] = true;
                 path.push(lots[i][j][l]);
