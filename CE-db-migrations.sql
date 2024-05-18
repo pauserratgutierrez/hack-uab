@@ -342,7 +342,11 @@ INSERT INTO municipis (lot, bloc, comarca, codi_ine, municipi, pob_total_num, es
   (5, 4, 'Ripollès', 17112, 'Ogassa', 222, '00:30:00'),
   (5, 4, 'Ripollès', 17224, 'Vilallonga de Ter', 410, '01:00:00'),
   (5, 4, 'Ripollès', 17125, 'Pardines', 165, '00:30:00'),
-  (5, 4, 'Ripollès', 17043, 'Queralbs', 191, '00:30:00');
+  (5, 4, 'Ripollès', 17043, 'Queralbs', 191, '00:30:00'),
+  -- Dades Rutes General
+  (2, -1, 'Barcelonès', '08001', 'Barcelona', 1664182, '00:00:00'), -- municipi_id 312
+  (4, -1, 'Gironès', '17079', 'Girona', 100266, '00:00:00'), -- municipi_id 313
+  (5, -1, 'Tarragonès', '43148', 'Tarragona', 132199, '00:00:00'); -- municipi_id 314
 
 -- Add more data. This geopoints come from the Google Maps API. We generated them once and inserted the corresponding data to the DB. Only if the data needs to change we need to run the Google Maps API script again. We can use the following SQL to insert the data:
 INSERT INTO municipis_geo (municipi_id, geopoint) VALUES
@@ -656,4 +660,7 @@ INSERT INTO municipis_geo (municipi_id, geopoint) VALUES
   (308, ST_SRID(ST_GeomFromText('POINT(42.2659846 2.2777977)'), 4326)),
   (309, ST_SRID(ST_GeomFromText('POINT(42.3309462 2.311995)'), 4326)),
   (310, ST_SRID(ST_GeomFromText('POINT(42.3125691 2.2141363)'), 4326)),
-  (311, ST_SRID(ST_GeomFromText('POINT(42.3495303 2.1628299)'), 4326));
+  (311, ST_SRID(ST_GeomFromText('POINT(42.3495303 2.1628299)'), 4326)),
+  (312, ST_SRID(ST_GeomFromText('POINT(41.3873974 2.168568)'), 4326)), -- Barcelona
+  (313, ST_SRID(ST_GeomFromText('POINT(41.9794005 2.8214264)'), 4326)), -- Girona
+  (314, ST_SRID(ST_GeomFromText('POINT(41.1188827 1.2444909)'), 4326)); -- Tarragona

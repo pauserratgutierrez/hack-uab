@@ -16,6 +16,10 @@ export async function geocode(address) {
   return response.data.results[0].geometry.location;
 };
 
+// console.log(await geocode(['Barcelona']));
+// console.log(await geocode(['Girona']));
+// console.log(await geocode(['Tarragona']));
+
 // Get coordinates from all municipis
 // Only needs to be called once to populate the database
 // We can then export the data to a SQL migration file!
