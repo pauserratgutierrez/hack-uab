@@ -6,7 +6,7 @@ const workingHours = 8;
 const restingHours = 1;
 const marginHours = 0.5;
 
-const truckVel = 60_000; // m/h
+const truckVel = 60; // m/h
 
 const startingPoints = ["Girona", "Barcelona", "Tarragona"];
 
@@ -22,7 +22,7 @@ const computeRoute = (lots, i, j, k, visited, startingPoint, currentPoint, curre
 
     for (let l = 0; l < visited; ++l) {
         if (!visited[l]){
-            const time = getMatrix(currentPoint, lots[i][j][l]).duration + getTime(currentPoint);
+            const time = getMatrix([currentPoint, lots[i][j][l]).duration + getTime(currentPoint);
             if (time <= workingHours) {
                 visited[l] = true;
                 path.push(lots[i][j][l]);
@@ -33,7 +33,6 @@ const computeRoute = (lots, i, j, k, visited, startingPoint, currentPoint, curre
             }
         }
     }
-
     return path;
 }
 
