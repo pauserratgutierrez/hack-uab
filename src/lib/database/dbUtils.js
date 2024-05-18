@@ -22,6 +22,3 @@ export async function getMunicipisLotsDB(lotNum, blocNum) {
   };
   return data;
 };
-
-const municipis = await getMunicipisLotsDB(2, 1);
-console.log(municipis[0].municipiInfo);
