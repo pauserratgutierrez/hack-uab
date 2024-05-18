@@ -2,6 +2,8 @@ import { connection } from './dbConn.js';
 
 export async function getMunicipisDB() {
   const result = await connection.query(`SELECT municipi, comarca FROM municipis;`);
+  if (result === 0) return null;
+
   const data = [];
   for (const row of result[0]) {
     data.push(`${row.municipi}, ${row.comarca}`);
@@ -18,6 +20,8 @@ const parseTime = (time) => {
 
 export async function getMunicipisLotsDB(lotNum, blocNum) {
   const result = await connection.query('SELECT municipi, comarca, estancia_min, pob_total_num FROM municipis WHERE lot = ? AND bloc = ?;', [lotNum, blocNum]);
+  if (result === 0) return null;
+
   const data = [];
   for (const row of result[0]) {
     const municipiInfo = `${row.municipi}, ${row.comarca}`;
@@ -27,7 +31,3 @@ export async function getMunicipisLotsDB(lotNum, blocNum) {
   };
   return data;
 };
-
-const result = await getMunicipisLotsDB(2, 1);
-console.log(result);
-
