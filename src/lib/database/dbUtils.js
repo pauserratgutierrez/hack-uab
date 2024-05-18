@@ -33,12 +33,12 @@ const parseTime = (time) => {
 };
 
 export async function getMunicipisByLotsAndBlocsDB(lotNum, blocNum) {
-  const result = await connection.query('SELECT municipi_id, municipi, comarca, estancia_min, pob_total_num FROM municipis WHERE lot = ? AND bloc = ?;', [lotNum, blocNum]);
+  const result = await connection.query('SELECT id, municipi, comarca, estancia_min, pob_total_num FROM municipis WHERE lot = ? AND bloc = ?;', [lotNum, blocNum]);
   if (result === 0) return null;
 
   const data = [];
   for (const row of result[0]) {
-    const municipiId = row.municipi_id;
+    const municipiId = row.id;
     const municipiInfo = `${row.municipi}, ${row.comarca}`;
     const estanciaMin = parseTime(row.estancia_min); 
     const pobTotalNum = row.pob_total_num;
