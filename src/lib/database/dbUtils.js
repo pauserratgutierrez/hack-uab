@@ -66,27 +66,48 @@ export async function getMunicipisGeoOrderedByDistanceDB(municipiId) {
   //   AND m.bloc = (SELECT bloc FROM municipis WHERE id = @given_municipi_id)
   // ORDER BY distance;
   
+  const lotBlocQuery = `
+    SELECT lot, bloc
+    FROM municipis
+    WHERE id = ?;
+  `;
+
+  const [lotBlocResult] = await connection.query(lotBlocQuery, [municipiId]);
+  if (lotBlocResult.length === 0) return null;
+
+  const { lot, bloc } = lotBlocResult[0];
+
+  // Get the geopoint of the given municipi
+  const geopointQuery = `
+    SELECT geopoint
+    FROM municipis_geo
+    WHERE municipi_id = ?;
+  `;
+
+  const [geopointResult] = await connection.query(geopointQuery, [municipiId]);
+  if (geopointResult.length === 0) return null;
+
+  const givenGeopoint = geopointResult[0].geopoint;
+
+  // Query to get all municipis ordered by distance from the given municipi, within the same lot and bloc
   const query = `
-    SET @given_municipi_id = ?;
-    SELECT @given_geopoint := geopoint FROM municipis_geo WHERE municipi_id = @given_municipi_id;
     SELECT m.id, m.lot, m.bloc, m.comarca, m.codi_ine, m.municipi, m.pob_total_num, m.estancia_min,
-      ST_Distance_Sphere(geo.geopoint, @given_geopoint) AS distance
+      ST_Distance_Sphere(geo.geopoint, ST_GeomFromText(?, 4326)) AS distance
     FROM municipis m
     JOIN municipis_geo geo ON m.id = geo.municipi_id
-    WHERE m.lot = (SELECT lot FROM municipis WHERE id = @given_municipi_id)
-      AND m.bloc = (SELECT bloc FROM municipis WHERE id = @given_municipi_id)
+    WHERE m.lot = ? AND m.bloc = ?
     ORDER BY distance;
   `;
-  const result = await connection.query(query, [municipiId]);
-  if (result === 0) return null;
 
-  const data = [];
-  for (const row of result[2]) {
-    const municipiId = row.id;
-    const municipiInfo = `${row.municipi}, ${row.comarca}`;
-    const estanciaMin = parseTime(row.estancia_min); 
-    const pobTotalNum = row.pob_total_num;
-    const distance = row.distance;
-    data.push({ municipiId, municipiInfo, estanciaMin, pobTotalNum, distance });
-  };
-};
+  const [result] = await connection.query(query, [givenGeopoint, lot, bloc]);
+
+  const data = result.map(row => ({
+    municipiId: row.id,
+    municipiInfo: `${row.municipi}, ${row.comarca}`,
+    estanciaMin: parseTime(row.estancia_min),
+    pobTotalNum: row.pob_total_num,
+    distance: row.distance
+  }));
+
+  return data;
+}
