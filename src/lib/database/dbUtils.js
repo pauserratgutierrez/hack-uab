@@ -53,9 +53,9 @@ export async function getMunicipiGeoDB(municipiId) {
 // Get all the municipis geopoints ordered by distance from a given municipi id, joining the municipis table to retrieve WHERE lot and bloc
 export async function getMunicipisGeoOrderedByDistanceDB(municipiId, lotNum, blocNum) {
   const query = `
-    SELECT municipis.municipi_id, municipis.municipi, municipis.comarca, municipis_geo.geopoint
+    SELECT municipis.id, municipis.municipi, municipis.comarca, municipis_geo.geopoint
     FROM municipis
-    JOIN municipis_geo ON municipis.municipi_id = municipis_geo.municipi_id
+    JOIN municipis_geo ON municipis.id = municipis_geo.municipi_id
     WHERE municipis.lot = ? AND municipis.bloc = ?
     ORDER BY ST_Distance_Sphere(municipis_geo.geopoint, (SELECT geopoint FROM municipis_geo WHERE municipi_id = ?));
   `;
