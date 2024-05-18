@@ -17,7 +17,7 @@ const client = new Client({});
 // await geocode('Barcelona').then(response => { console.log(response) });
 
 // Calculate distance between two addresses
-export async function distanceMatrix(origins, destinations) {
+export async function getMatrix(origins, destinations) {
   const response = await client.distancematrix({
     params: {
       origins,
@@ -26,19 +26,11 @@ export async function distanceMatrix(origins, destinations) {
     },
   });
 
-  return response.data;
+  const result = response.data;
+  if (result.status === 'OK') {
+    const { distance, duration } = result.rows[0].elements[0];
+    return { distance, duration };
+  } else {
+    return null;
+  };
 };
-
-const origins = ['Pau, Alt Empordà'];
-const destinations = ['Sant Celoni, Barcelona'];
-
-(async () => {
-  const response = await distanceMatrix(origins, destinations);
-  const rows = response.rows;
-
-  rows.forEach((row, i) => {
-    row.elements.forEach((element, j) => {
-      console.log(element, j);
-    });
-  });
-})();
