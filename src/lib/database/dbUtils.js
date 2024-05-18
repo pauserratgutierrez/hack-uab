@@ -11,8 +11,6 @@ export async function getMunicipisFormatedDB() {
   return data;
 };
 
-// Ordenar tots els municipis d'un lot i bloc determinat per distància mitjançant municipis_geo que conté les coords lat i long
-
 const parseTime = (time) => {
   const t = time.split(':');
   return parseFloat(t[0]) + parseFloat(t[1]/60) + parseFloat(t[2]/3600); 
@@ -50,8 +48,10 @@ export async function getMunicipiGeoDB(municipiId) {
   return { municipi_id: rows[0].municipi_id, latitude, longitude };
 };
 
+
+// Ordenar tots els municipis d'un lot i bloc determinat per distància mitjançant municipis_geo que conté les coords lat i long
 // Get all the municipis geopoints ordered by distance from a given municipi id, joining the municipis table to retrieve WHERE lot and bloc
-export async function getMunicipisGeoOrderedByDistanceDB(municipiId) {
+export async function getMunicipisGeoOrderedByDistanceDB(municipiId, blocNum) {
   // SET @given_municipi_id = 1; -- Replace with the actual municipi id
 
   // -- Get the geopoint of the given municipi
@@ -97,15 +97,7 @@ export async function getMunicipisGeoOrderedByDistanceDB(municipiId) {
   //   distance;
   
   const query = `
-    SELECT 
-      m.id, 
-      m.lot, 
-      m.bloc, 
-      m.comarca, 
-      m.codi_ine, 
-      m.municipi, 
-      m.pob_total_num, 
-      m.estancia_min,
+    SELECT m.id, m.lot, m.bloc, m.comarca, m.codi_ine, m.municipi, m.pob_total_num, m.estancia_min,
       ST_Distance_Sphere(geo.geopoint, gm.geopoint) AS distance
     FROM 
       municipis m
@@ -114,19 +106,14 @@ export async function getMunicipisGeoOrderedByDistanceDB(municipiId) {
     ON 
       m.id = geo.municipi_id
     JOIN 
-      (SELECT lot, bloc, geopoint 
-       FROM municipis m 
-       JOIN municipis_geo geo 
-       ON m.id = geo.municipi_id 
-       WHERE m.id = ?) gm
+      (SELECT lot, geopoint FROM municipis m 
+        JOIN municipis_geo geo ON m.id = geo.municipi_id WHERE m.id = ?) gm
     ON 
-      m.lot = gm.lot 
-      AND m.bloc = gm.bloc
-    ORDER BY 
-      distance;
+      m.lot = gm.lot AND m.bloc = ?
+    ORDER BY distance;
   `;
 
-  const result = await connection.query(query, [municipiId]);
+  const result = await connection.query(query, [municipiId, blocNum]);
   if (result === 0) return null;
 
   const data = [];
