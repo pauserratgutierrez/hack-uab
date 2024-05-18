@@ -48,3 +48,20 @@ export async function getMunicipiGeoDB(municipiId) {
   const [latitude, longitude] = rows[0].geopoint.replace('POINT(', '').replace(')', '').split(' ').map(Number);
   return { municipi_id: rows[0].municipi_id, latitude, longitude };
 };
+
+// Get all the municipis geopoints ordered by distance from a given municipi id
+export async function getMunicipisGeoOrderedByDistanceDB(municipiId) {
+  const query = `SELECT municipi_id, ST_AsText(geopoint) AS geopoint FROM municipis_geo ORDER BY ST_Distance(geopoint, (SELECT geopoint FROM municipis_geo WHERE municipi_id = ?));`;
+  const result = await connection.query(query, [municipiId]);
+  if (result === 0) return null;
+
+  const data = [];
+  for (const row of result[0]) {
+    const [latitude, longitude] = row.geopoint.replace('POINT(', '').replace(')', '').split(' ').map(Number);
+    data.push({ municipiId: row.municipi_id, latitude, longitude });
+  };
+  return data;
+};
+
+const orderedMunicipis = await getMunicipisGeoOrderedByDistanceDB(52);
+console.log(orderedMunicipis);

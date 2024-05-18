@@ -18,6 +18,7 @@ export async function geocode(address) {
 
 // Get coordinates from all municipis
 // Only needs to be called once to populate the database
+// We can then export the data to a SQL migration file!
 // async function retrieveMunicipisGeo() {
 //   const municipiList = await getMunicipisFormatedDB();
 //   for (const { municipiId, municipiInfo } of municipiList) {
