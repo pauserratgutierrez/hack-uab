@@ -1,4 +1,3 @@
-
 var lots = [[[],[],[],[]],[[],[],[],[]],[[],[],[],[]]];
 
 const workingHours = 8;
@@ -53,77 +52,6 @@ async function getRoutes(lots, startingPoints, workingHours, restingHours, margi
     }
 
 }
-
-class Graph {
-    constructor() {
-        this.adjacencyList = new Map();
-    }
-
-    addNode(node) {
-        this.adjacencyList.set(node, []);
-    }
-
-    addEdge(node1, node2, weight) {
-        this.adjacencyList.get(node1).push({ node: node2, weight: weight });
-        this.adjacencyList.get(node2).push({ node: node1, weight: weight });
-    }
-}
-
-function findBestCycle(graph, startNode, maxCost) {
-    let bestCycle = [];
-    let bestCycleWeight = Infinity;
-    let bestCycleNodes = 0;
-
-    function dfs(currentNode, visited, path, currentWeight) {
-        if (currentWeight > maxCost) return;
-
-        // Check if a cycle is formed
-        if (currentNode === startNode && path.length > 1) {
-            if (path.length > bestCycleNodes || (path.length === bestCycleNodes && currentWeight < bestCycleWeight)) {
-                bestCycleNodes = path.length;
-                bestCycleWeight = currentWeight;
-                bestCycle = path.slice();
-            }
-            return;
-        }
-
-        for (let neighbor of graph.adjacencyList.get(currentNode)) {
-            if (!visited.has(neighbor.node) || (neighbor.node === startNode && path.length > 1)) {
-                visited.add(neighbor.node);
-                path.push(neighbor.node);
-                dfs(neighbor.node, visited, path, currentWeight + neighbor.weight);
-                path.pop();
-                visited.delete(neighbor.node);
-            }
-        }
-    }
-
-    const visited = new Set([startNode]);
-    dfs(startNode, visited, [startNode], 0);
-
-    return { cycle: bestCycle, weight: bestCycleWeight };
-}
-
-// Example Usage:
-const graph = new Graph();
-graph.addNode(0);
-graph.addNode(1);
-graph.addNode(2);
-graph.addNode(3);
-
-graph.addEdge(0, 1, 10);
-graph.addEdge(0, 2, 15);
-graph.addEdge(1, 2, 35);
-graph.addEdge(1, 3, 25);
-graph.addEdge(2, 3, 30);
-
-const startNode = 0;
-const maxCost = 50;
-const result = findBestCycle(graph, startNode, maxCost);
-
-console.log('Best cycle:', result.cycle);
-console.log('Cycle weight:', result.weight);
-
 
     // for (let i = 0; i < lots.length; ++i) {
     //     //recorrer cada lot
