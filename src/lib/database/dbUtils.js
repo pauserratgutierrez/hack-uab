@@ -1,12 +1,12 @@
 import { connection } from './dbConn.js';
 
-export async function getMunicipisDB() {
-  const result = await connection.query(`SELECT municipi, comarca FROM municipis;`);
+export async function getMunicipisFormatedDB() {
+  const result = await connection.query(`SELECT id, municipi, comarca FROM municipis;`);
   if (result === 0) return null;
 
   const data = [];
   for (const row of result[0]) {
-    data.push(`${row.municipi}, ${row.comarca}`);
+    data.push({ municipiId: row.id, municipiInfo: `${row.municipi}, ${row.comarca}` });
   };
   return data;
 };
@@ -30,4 +30,21 @@ export async function getMunicipisByLotsAndBlocsDB(lotNum, blocNum) {
     data.push({ municipiInfo, estanciaMin, pobTotalNum });
   };
   return data;
+};
+
+export async function addMunicipiGeoDB(municipiId, lat, lng) {
+  const query = `INSERT INTO municipis_geo (municipi_id, geopoint) VALUES (?, ST_SRID(ST_GeomFromText('POINT(${lng} ${lat})'), 4326))`;
+  const result = await connection.query(query, [municipiId]);
+  if (result === 0) return null;
+  return result[0];
+};
+
+export async function getMunicipiGeoDB(municipiId) {
+  const query = `SELECT municipi_id, ST_AsText(geopoint) AS geopoint FROM municipis_geo WHERE municipi_id = ?`;
+  const result = await connection.query(query, [municipiId]);
+  if (rows.length === 0) return null;
+
+  // Parse the POINT value to extract coordinates
+  const [latitude, longitude] = rows[0].geopoint.replace('POINT(', '').replace(')', '').split(' ').map(Number);
+  return { municipi_id: rows[0].municipi_id, latitude, longitude };
 };

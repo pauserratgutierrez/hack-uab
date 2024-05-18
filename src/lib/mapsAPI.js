@@ -1,20 +1,33 @@
 import { Client } from '@googlemaps/google-maps-services-js';
+// import { getMunicipisFormatedDB, addMunicipiGeoDB } from './database/dbUtils.js';
 
+// Initialize Google Maps API client
 const client = new Client({});
 
-// Geocoding
-// export async function geocode(address) {
-//   const response = await client.geocode({
-//     params: {
-//       address,
-//       key: process.env.GOOGLE_MAPS_API_KEY,
-//     },
-//   });
+// Get coordinates from an address
+export async function geocode(address) {
+  const response = await client.geocode({
+    params: {
+      address,
+      key: process.env.GOOGLE_MAPS_API_KEY,
+    },
+  });
 
-//   return response.data.results[0].geometry.location;
+  return response.data.results[0].geometry.location;
+};
+
+// Get coordinates from all municipis
+// Only needs to be called once to populate the database
+// async function retrieveMunicipisGeo() {
+//   const municipiList = await getMunicipisFormatedDB();
+//   for (const { municipiId, municipiInfo } of municipiList) {
+//     const geocoded = await geocode(municipiInfo);
+//     console.log(`(${municipiId}) ${municipiInfo} - ${geocoded.lat}, ${geocoded.lng}`);
+//     await addMunicipiGeoDB(municipiId, geocoded.lat, geocoded.lng);
+//     // Timer to avoid rate limit
+//     await new Promise(resolve => setTimeout(resolve, 200));
+//   };
 // };
-
-// await geocode('Barcelona').then(response => { console.log(response) });
 
 // Calculate distance between two addresses
 export async function getMatrix(origins, destinations) {
