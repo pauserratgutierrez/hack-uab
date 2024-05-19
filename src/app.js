@@ -1,7 +1,8 @@
 import { computGlobal } from './lib/getRoutes.js';
 
 const main = async () => {
-  await computGlobal();
+  return await computGlobal();
 };
 
-main().then(console.log(result));
+const result = await main();
+console.log(result);
