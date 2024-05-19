@@ -30,6 +30,7 @@ export const computGlobal = async () => {
   };
 
   const computeRoute = async (i, j, notVisited, startingPoint, currentPoint, currentTime, workingHours, truckVel, path) => {
+    console.log(currentTime);
 
     const getDistance = async (origin, destination) => {
       const key1 = `${origin} - ${destination}`;

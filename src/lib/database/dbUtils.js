@@ -16,11 +16,9 @@ export async function getCacheDB() {
 export async function addCacheDB(cacheMap) {
   for(const [key, content] of cacheMap.entries()) {
     console.log("contentdistance", content)
-    if (content) {
-      const query = `INSERT IGNORE INTO cache_distance (key_dist, content) VALUES (?, ?)`;
-      const result = await connection.query(query, [key, content]);
-      if (result === 0) return null;
-    }
+    const query = `INSERT IGNORE INTO cache_distance (key_dist, content) VALUES (?, ?)`;
+    const result = await connection.query(query, [key, content]);
+    if (result === 0) return null;
   };
 };
 
