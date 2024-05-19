@@ -4,4 +4,4 @@ const main = async () => {
   await computGlobal();
 };
 
-main();
+main().then(console.log(result));
