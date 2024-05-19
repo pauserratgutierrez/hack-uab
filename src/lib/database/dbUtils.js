@@ -13,12 +13,14 @@ export async function getCacheDB() {
   return cache;
 };
 
-export async function addCacheDB(key, content) {
-  const query = `INSERT INTO cache_distance (key_dist, content) VALUES (?, ?)`;
-  const result = await connection.query(query, [key, content]);
-  if (result === 0) return null;
+export async function addCacheDB(cacheMap) {
+  for(const [key, content] of cacheMap.entries()) {
+    const query = `INSERT INTO cache_distance (key_dist, content) VALUES (?, ?)`;
+    const result = await connection.query(query, [key, content]);
+    if (result === 0) return null;
+  };
   return result[0];
-}
+};
 
 // Search in municipis where bloc = -1
 export async function getStartingPointsDB() {
