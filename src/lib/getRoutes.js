@@ -36,16 +36,13 @@ export const computGlobal = async () => {
       const key1 = `${origin}-${destination}`;
       const key2 = `${destination}-${origin}`;
       if (distanceCache.has(key1)) {
-        console.log("cache hit");
         return distanceCache.get(key1);
       }
         else if (distanceCache.has(key2)) {
-          console.log("cache hit");
           return distanceCache.get(key2);
         }
         const result = await getMatrix([origin], [destination]);
         distanceCache.set(key1, result.distance);
-        console.log("cache miss");
         return result.distance;
       }
 
@@ -61,7 +58,7 @@ export const computGlobal = async () => {
         if (notVisited.has(nearby[l].municipiInfo)) {
           const toNearbyDistance = await getDistance(currentPoint.municipiInfo, nearby[l].municipiInfo);
           const backToStartDistance = await getDistance(nearby[l].municipiInfo, startingPoint.municipiInfo);
-          console.log("toNearbyDistance", toNearbyDistance);
+          console.log("", toNearbyDistance);
           console.log("backToStartDistance", backToStartDistance);
 
           const totalTime = parseFloat(currentTime + toNearbyDistance/truckVel + backToStartDistance/truckVel);
