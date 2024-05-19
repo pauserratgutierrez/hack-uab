@@ -7,6 +7,5 @@ const main = async () => {
 
 const result = await main();
 
-//acabem el programa
+// Acabem el programa
 process.exit(0);
-
