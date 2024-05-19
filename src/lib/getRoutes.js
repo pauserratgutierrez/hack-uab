@@ -1,5 +1,5 @@
 import { getMatrix } from './mapsAPI.js';
-import { getStartingPointsDB } from './database/dbUtils.js';
+import { addCacheDB, getCacheDB, getStartingPointsDB } from './database/dbUtils.js';
 import { getMunicipisGeoOrderedByDistanceDB } from './database/dbUtils.js';
 import { getMunicipisByLotsAndBlocsDB } from './database/dbUtils.js';
 
@@ -15,7 +15,7 @@ export const computGlobal = async () => {
 
   let abort = false;
 
-  const distanceCache = new Map();
+  const distanceCache = await getCacheDB();
             
   const carregaLots = async () => {
     const lots = [];
@@ -125,20 +125,7 @@ export const computGlobal = async () => {
   const result = await getRoutes(lots, startingPoints, workingHours, restingHours, marginHours, truckVel); 
   console.log("result done");
 
-  for(let i = 0; i < result.length; i++) {
-    for (let j = 0; j < result[i].length; j++) {
-      for (let k = 0; k < result[i][j].length; k++){
-        const { lot, bloc, dia, tempsRuta, distanciaRuta  } = result[i][j][k];
-        console.log({ lot, bloc, dia, tempsRuta, distanciaRuta});
-        for(let l = 0; l < result[i][j][k].municipis.length; l++) {
-          const { municipiId, municipiInfo, pobTotalNum, estanciaMin } = result[i][j][k].municipis[l];
-          console.log({ municipiId, municipiInfo, pobTotalNum, estanciaMin });
-          const { municipiGeo } = result[i][j][k].municipis[l];
-          console.log({ municipiGeo });
-        }
-      }
-    }
-  }
+  await addCacheDB(distanceCache);
 
   return result;
 };
