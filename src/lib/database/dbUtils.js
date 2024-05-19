@@ -17,12 +17,11 @@ export async function addCacheDB(cacheMap) {
   for(const [key, content] of cacheMap.entries()) {
     console.log("contentdistance", content)
     if (content) {
-      const query = `INSERT INTO cache_distance (key_dist, content) VALUES (?, ?)`;
+      const query = `INSERT IGNORE INTO cache_distance (key_dist, content) VALUES (?, ?)`;
       const result = await connection.query(query, [key, content]);
       if (result === 0) return null;
     }
   };
-  
 };
 
 // Search in municipis where bloc = -1
