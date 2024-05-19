@@ -30,6 +30,7 @@ export const computGlobal = async () => {
   };
 
   const computeRoute = async (i, j, notVisited, startingPoint, currentPoint, currentTime, workingHours, truckVel, path) => {
+
     const getDistance = async (origin, destination) => {
       const key1 = `${origin} - ${destination}`;
       const key2 = `${destination} - ${origin}`;
@@ -42,7 +43,7 @@ export const computGlobal = async () => {
           return distanceCache.get(key2);
         }
         const result = await getMatrix([origin], [destination]);
-        distanceCache.set(key1, result);
+        distanceCache.set(key1, result.distance);
         console.log("cache miss");
         return result;
       }
