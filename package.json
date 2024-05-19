@@ -13,7 +13,6 @@
   "dependencies": {
     "@googlemaps/google-maps-services-js": "^3.4.0",
     "core-js": "^3.37.1",
-    "express": "^4.19.2",
     "mysql2": "^3.9.7"
   }
 }
