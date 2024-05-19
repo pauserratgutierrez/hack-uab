@@ -664,3 +664,4 @@ INSERT INTO municipis_geo (municipi_id, geopoint) VALUES
   (312, ST_SRID(ST_GeomFromText('POINT(41.3873974 2.168568)'), 4326)), -- Barcelona
   (313, ST_SRID(ST_GeomFromText('POINT(41.9794005 2.8214264)'), 4326)), -- Girona
   (314, ST_SRID(ST_GeomFromText('POINT(41.1188827 1.2444909)'), 4326)); -- Tarragona
+  
