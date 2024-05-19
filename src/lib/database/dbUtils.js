@@ -2,19 +2,24 @@ import { connection } from './dbConn.js';
 
 // Get Cache
 export async function getCacheDB() {
-  const result = await connection.query('SELECT * FROM cache_distance;');
-  if (result === 0) return null;
-
-  // Return as a Map() with the keys and contents of the cache from DB
-  const cache = new Map();
-  for (const row of result[0]) {
-    cache.set(row.key_dist, row.content);
+  try {
+    const result = await connection.query('SELECT * FROM cache_distance;');
+    if (result === 0) return null;
+  
+    // Return as a Map() with the keys and contents of the cache from DB
+    const cache = new Map();
+    for (const row of result[0]) {
+      cache.set(row.key_dist, row.content);
+    };
+    return cache;
+  } catch (e) {
+    console.log(e);
   };
-  return cache;
 };
 
 export async function addCacheDB(cacheMap) {
   for(const [key, content] of cacheMap.entries()) {
+    console.log("contentdistance", content)
     const query = `INSERT IGNORE INTO cache_distance (key_dist, content) VALUES (?, ?)`;
     const result = await connection.query(query, [key, content]);
     if (result === 0) return null;
@@ -23,29 +28,37 @@ export async function addCacheDB(cacheMap) {
 
 // Search in municipis where bloc = -1
 export async function getStartingPointsDB() {
-  const result = await connection.query('SELECT id, municipi, comarca, estancia_min, pob_total_num FROM municipis WHERE bloc = -1;');
-  if (result === 0) return null;
-
-  const data = [];
-  for (const row of result[0]) {
-    const municipiId = row.id;
-    const municipiInfo = `${row.municipi}, ${row.comarca}`;
-    const estanciaMin = parseTime(row.estancia_min); 
-    const pobTotalNum = row.pob_total_num;
-    data.push({ municipiId, municipiInfo, estanciaMin, pobTotalNum });
+  try {
+    const result = await connection.query('SELECT id, municipi, comarca, estancia_min, pob_total_num FROM municipis WHERE bloc = -1;');
+    if (result === 0) return null;
+  
+    const data = [];
+    for (const row of result[0]) {
+      const municipiId = row.id;
+      const municipiInfo = `${row.municipi}, ${row.comarca}`;
+      const estanciaMin = parseTime(row.estancia_min); 
+      const pobTotalNum = row.pob_total_num;
+      data.push({ municipiId, municipiInfo, estanciaMin, pobTotalNum });
+    };
+    return data;
+  } catch (e) {
+    console.log(e);
   };
-  return data;
 };
 
 export async function getMunicipisFormatedDB() {
-  const result = await connection.query(`SELECT id, municipi, comarca FROM municipis;`);
-  if (result === 0) return null;
-
-  const data = [];
-  for (const row of result[0]) {
-    data.push({ municipiId: row.id, municipiInfo: `${row.municipi}, ${row.comarca}` });
+  try {
+    const result = await connection.query(`SELECT id, municipi, comarca FROM municipis;`);
+    if (result === 0) return null;
+  
+    const data = [];
+    for (const row of result[0]) {
+      data.push({ municipiId: row.id, municipiInfo: `${row.municipi}, ${row.comarca}` });
+    };
+    return data;
+  } catch (e) {
+    console.log(e);
   };
-  return data;
 };
 
 const parseTime = (time) => {
@@ -54,42 +67,53 @@ const parseTime = (time) => {
 };
 
 export async function getMunicipisByLotsAndBlocsDB(lotNum, blocNum) {
-  const result = await connection.query('SELECT id, municipi, comarca, estancia_min, pob_total_num FROM municipis WHERE lot = ? AND bloc = ?;', [lotNum, blocNum]);
-  if (result === 0) return null;
-
-  const data = [];
-  for (const row of result[0]) {
-    const municipiId = row.id;
-    const municipiInfo = `${row.municipi}, ${row.comarca}`;
-    const estanciaMin = parseTime(row.estancia_min); 
-    const pobTotalNum = row.pob_total_num;
-    data.push({ municipiId, municipiInfo, estanciaMin, pobTotalNum });
+  try {
+    const result = await connection.query('SELECT id, municipi, comarca, estancia_min, pob_total_num FROM municipis WHERE lot = ? AND bloc = ?;', [lotNum, blocNum]);
+    if (result === 0) return null;
+  
+    const data = [];
+    for (const row of result[0]) {
+      const municipiId = row.id;
+      const municipiInfo = `${row.municipi}, ${row.comarca}`;
+      const estanciaMin = parseTime(row.estancia_min); 
+      const pobTotalNum = row.pob_total_num;
+      data.push({ municipiId, municipiInfo, estanciaMin, pobTotalNum });
+    };
+    return data;
+  } catch (e) {
+    console.log(e);
   };
-  return data;
 };
 
 export async function addMunicipiGeoDB(municipiId, lat, lng) {
-  const query = `INSERT INTO municipis_geo (municipi_id, geopoint) VALUES (?, ST_SRID(ST_GeomFromText('POINT(${lat} ${lng})'), 4326))`;
-  const result = await connection.query(query, [municipiId]);
-  if (result === 0) return null;
-  return result[0];
+  try {
+    const query = `INSERT INTO municipis_geo (municipi_id, geopoint) VALUES (?, ST_SRID(ST_GeomFromText('POINT(${lat} ${lng})'), 4326))`;
+    const result = await connection.query(query, [municipiId]);
+    if (result === 0) return null;
+    return result[0];
+  } catch (e) {
+    console.log(e);
+  };
 };
 
 export async function getMunicipiGeoDB(municipiId) {
-  const query = `SELECT municipi_id, ST_AsText(geopoint) AS geopoint FROM municipis_geo WHERE municipi_id = ?`;
-  const result = await connection.query(query, [municipiId]);
-  if (rows.length === 0) return null;
-
-  // Parse the POINT value to extract coordinates
-  const [latitude, longitude] = rows[0].geopoint.replace('POINT(', '').replace(')', '').split(' ').map(Number);
-  return { municipi_id: rows[0].municipi_id, latitude, longitude };
+  try {
+    const query = `SELECT municipi_id, ST_AsText(geopoint) AS geopoint FROM municipis_geo WHERE municipi_id = ?`;
+    const result = await connection.query(query, [municipiId]);
+    if (rows.length === 0) return null;
+  
+    // Parse the POINT value to extract coordinates
+    const [latitude, longitude] = rows[0].geopoint.replace('POINT(', '').replace(')', '').split(' ').map(Number);
+    return { municipi_id: rows[0].municipi_id, latitude, longitude };
+  } catch (e) {
+    console.log(e);
+  };
 };
 
-
 // Ordenar tots els municipis d'un lot i bloc determinat per distància mitjançant municipis_geo que conté les coords lat i long
-// Get all the municipis geopoints ordered by distance from a given municipi id, joining the municipis table to retrieve WHERE lot and bloc
 export async function getMunicipisGeoOrderedByDistanceDB(municipiId, blocNum) {  
-  const query = `
+  try {
+    const query = `
     SELECT m.id, m.lot, m.bloc, m.comarca, m.codi_ine, m.municipi, m.pob_total_num, m.estancia_min, gm.geopoint,
       ST_Distance_Sphere(geo.geopoint, gm.geopoint) AS distance
     FROM 
@@ -120,4 +144,7 @@ export async function getMunicipisGeoOrderedByDistanceDB(municipiId, blocNum) {
   };
 
   return data;
+  } catch (e) {
+    console.log(e);
+  };
 };
