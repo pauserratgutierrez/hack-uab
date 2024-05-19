@@ -21,7 +21,7 @@ This is the main function that calculates optimal routes for the mobile financia
 # Installation
 - Clone the repository
 - Install dependencies `npm i`
-- Have a correctly populated '.env' file located on the main '/src' directory.
+- Have a correctly populated '.env' file located on the main `/src` directory.
 # Running the Project
 Ensure the database is set up and populated. Use the `CE-db-migrations.sql` migration file.
 Run the main script with `npm run start`
