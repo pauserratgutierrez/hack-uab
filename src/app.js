@@ -4,8 +4,7 @@ import { computGlobal } from './lib/getRoutes.js';
 const main = async () => {
   const data = await computGlobal();
   console.log(data);
-};
-
+}; 
 await main();
 
 // Acabem el programa
