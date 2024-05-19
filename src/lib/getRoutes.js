@@ -17,6 +17,8 @@ const numLots = [2, 4, 5];
 let abort = false;
 
 let count = 0;
+
+const distanceCache = new Map();
         
 const carregaLots = async () => {
     const lots = [];
@@ -30,11 +32,27 @@ const carregaLots = async () => {
     return lots;
 };
 
-
-//afegir funcio per cardar dades a lots
-
 const computeRoute = async (i, j, notVisited, startingPoint, currentPoint, currentTime, workingHours, truckVel, path) => {
-    const distanceInfo = await getMatrix([currentPoint.municipiInfo], [startingPoint.municipiInfo]);
+    
+    const getDistance = async (origin, destination) => {
+
+        const key1 = `${origin} - ${destination}`;
+        const key2 = `${destination} - ${origin}`;
+        if (distanceCache.has(key1)) {
+            console.log("cache hit");
+            return distanceCache.get(key1);
+        }
+        else if (distanceCache.has(key2)) {
+            console.log("cache hit");
+            return distanceCache.get(key2);
+        }
+        const result = await getMatrix([origin], [destination]);
+        distanceCache.set(key1, result);
+        console.log("cache miss");
+        return result;
+    }
+
+    const distanceInfo = await getDistance(currentPoint.municipiInfo, startingPoint.municipiInfo);
     ++count;
     // await new Promise(resolve => setTimeout(resolve, 20));
     if (notVisited.size == 0 || path.elements.length >= maxNumMunicipisDia || currentTime + distanceInfo.distance/truckVel > workingHours) {
@@ -45,9 +63,9 @@ const computeRoute = async (i, j, notVisited, startingPoint, currentPoint, curre
     const nearby = await getMunicipisGeoOrderedByDistanceDB(currentPoint.municipiId, j+1);
     
     for (let l = 0; l < nearby.length; ++l) {
-        if (notVisited.has(nearby[l].municipiInfo) || currentTime + await getMatrix([currentPoint.municipiInfo], [nearby[l].municipiInfo]) + nearby[l].estanciaMin + await getMatrix([nearby[l].municipiInfo], [startingPoint.municipiInfo]) <= workingHours + marginHours){
+        if (notVisited.has(nearby[l].municipiInfo) || currentTime + await getDistance(currentPoint.municipiInfo, nearby[l].municipiInfo) + nearby[l].estanciaMin + await getDistance(nearby[l].municipiInfo, startingPoint.municipiInfo) <= workingHours + marginHours){
 
-            const distanceInfo = await getMatrix([currentPoint.municipiInfo], [nearby[l].municipiInfo])
+            const distanceInfo = await getDistance(currentPoint.municipiInfo, nearby[l].municipiInfo)
             ++count;
             const time = parseFloat(distanceInfo.distance/truckVel + currentPoint.estanciaMin);
             //console.log("time", time);
@@ -107,11 +125,11 @@ const getRoutes = async (lots, startingPoints, workingHours, restingHours, margi
 }
 
 const startingPoints = await getStartingPointsDB();
-console.log("startingPoints", startingPoints);
+//console.log("startingPoints", startingPoints);
 const lots = await carregaLots();
-console.log("lots", lots);
+//console.log("lots", lots);
 const result = await getRoutes(lots, startingPoints, workingHours, restingHours, marginHours, truckVel); 
-for (let i = 0; i < result.length; ++i) {
-    console.log(result[i]);
-}
+// for (let i = 0; i < result.length; ++i) {
+//     console.log(result[i]);
+// }
 //id, temps total, imprimir globals
