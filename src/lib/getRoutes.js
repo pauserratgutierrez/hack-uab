@@ -96,7 +96,7 @@ export const computGlobal = async () => {
     return result;
   };
 
-  const getRoutes = async (lots, startingPoints, workingHours, restingHours, marginHours, truckVel) => {
+  const getRoutes = async (lots, startingPoints, workingHours, truckVel) => {
     const routes = [];
     for (let i = 0; i < lots.length; ++i) {
       //recorrer cada lot
@@ -123,7 +123,7 @@ export const computGlobal = async () => {
 
   const startingPoints = await getStartingPointsDB();
   const lots = await carregaLots();
-  const result = await getRoutes(lots, startingPoints, workingHours, restingHours, marginHours, truckVel); 
+  const result = await getRoutes(lots, startingPoints, workingHours, truckVel); 
   console.log("result done");
 
   await addCacheDB(distanceCache);
