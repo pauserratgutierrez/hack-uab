@@ -5,6 +5,16 @@
     <title>Caixa Enginyers - Càlcul de Rutes</title>
   </head>
   <body>
-    <div><p>Hola</p></div>
+    <div><button>Optimitzar Ruta</button></div>
   </body>
 </html>
+
+<script>
+  import { computGlobal } from '../getRoutes.js'
+  document.querySelector('button').addEventListener('click', () => {
+    console.log('CLICK FET');
+    computGlobal().then((res) => {
+      console.log('FET TOT');
+    })
+  });
+</script>
