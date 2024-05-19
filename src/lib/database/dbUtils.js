@@ -8,13 +8,13 @@ export async function getCacheDB() {
   // Return as a Map() with the keys and contents of the cache from DB
   const cache = new Map();
   for (const row of result[0]) {
-    cache.set(row.key, row.value);
+    cache.set(row.key_dist, row.content);
   };
   return cache;
 };
 
 export async function addCacheDB(key, content) {
-  const query = `INSERT INTO cache_distance (key, value) VALUES (?, ?)`;
+  const query = `INSERT INTO cache_distance (key_dist, content) VALUES (?, ?)`;
   const result = await connection.query(query, [key, content]);
   if (result === 0) return null;
   return result[0];

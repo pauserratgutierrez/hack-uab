@@ -5,8 +5,7 @@ CREATE DATABASE caixa_enginyers;
 USE caixa_enginyers;
 
 CREATE TABLE cache_distance (
-  id int NOT NULL AUTO_INCREMENT PRIMARY KEY,
-  key_dist varchar(255) UNIQUE NOT NULL,
+  key_dist varchar(255) UNIQUE NOT NULL PRIMARY KEY,
   content FLOAT NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_spanish_ci;
 
