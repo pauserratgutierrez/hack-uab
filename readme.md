@@ -11,7 +11,7 @@ Directories and Files
 
 # Key Functions
 `computGlobal()`
-This is the main function that calculates optimal routes for the mobile financial service. It performs the following steps:
+This is the main function that calculates optimal routes for the mobile financial service.
 
 # Usage Prerequisites
 Node.js installed
