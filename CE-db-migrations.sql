@@ -4,6 +4,13 @@ SET FOREIGN_KEY_CHECKS=0;
 CREATE DATABASE caixa_enginyers;
 USE caixa_enginyers;
 
+CREATE TABLE cache_distance (
+  keys text PRIMARY KEY,
+  content float,
+  CREATE INDEX idx_cache_distance_key_first ON cache_distance (key_first),
+  CREATE INDEX idx_cache_distance_content_second ON cache_distance (content_second)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_spanish_ci;
+
 CREATE TABLE municipis (
   id int NOT NULL AUTO_INCREMENT PRIMARY KEY,
   lot int NOT NULL,

@@ -1,5 +1,25 @@
 import { connection } from './dbConn.js';
 
+// Get Cache
+export async function getCacheDB() {
+  const result = await connection.query('SELECT * FROM cache_distance;');
+  if (result === 0) return null;
+
+  // Return as a Map() with the keys and contents of the cache from DB
+  const cache = new Map();
+  for (const row of result[0]) {
+    cache.set(row.key, row.value);
+  };
+  return cache;
+};
+
+export async function addCacheDB(key, content) {
+  const query = `INSERT INTO cache_distance (key, value) VALUES (?, ?)`;
+  const result = await connection.query(query, [key, content]);
+  if (result === 0) return null;
+  return result[0];
+}
+
 // Search in municipis where bloc = -1
 export async function getStartingPointsDB() {
   const result = await connection.query('SELECT id, municipi, comarca, estancia_min, pob_total_num FROM municipis WHERE bloc = -1;');
