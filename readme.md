@@ -13,23 +13,7 @@ Directories and Files
 `computGlobal()`
 This is the main function that calculates optimal routes for the mobile financial service. It performs the following steps:
 
-- Initialization: Sets working hours, truck velocity, and other parameters.
-Loading Data: Loads municipality data and starting points from the database.
-- Route Computation: Iteratively computes routes considering constraints like maximum municipalities per day and working hours.
-Output: Converts the computed routes to a JSON format.
-carregaLots()
-Loads the municipalities for each lot and block from the database.
-
-computeRoute()
-Recursively computes an optimal route for a given starting point, considering distances, working hours, and municipalities to visit.
-
-getRoutes()
-Generates routes for all lots, ensuring each municipality is visited and constraints are respected.
-
-tojson()
-Converts the computed routes into a JSON structure for easy use and analysis.
-
-Usage
+# Usage
 Prerequisites
 Node.js installed
 Access to the required databases
@@ -61,9 +45,3 @@ Municipality Data: Extracted from Lot_2_Municipis.pdf, Lot_4_Municipis.pdf, and 
 Database: Setup and migration script provided in CE-db-migrations.sql.
 Contributing
 Contributions are welcome! Please fork the repository and submit a pull request with your changes.
-
-License
-This project is licensed under the MIT License. See the LICENSE file for details.
-
-Acknowledgements
-This project was developed as part of a challenge set by Caixa d'Enginyers. The goal is to optimize mobile financial services across various municipalities in Catalonia, ensuring efficient and adaptive route planning.
