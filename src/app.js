@@ -1,11 +1,12 @@
-import { addMunicipiGeoDB } from './lib/database/dbUtils.js';
+// import { addMunicipiGeoDB } from './lib/database/dbUtils.js';
 import { computGlobal } from './lib/getRoutes.js';
 
 const main = async () => {
-  return await computGlobal();
+  const data = await computGlobal();
+  console.log(data);
 };
 
-const result = await main();
+await main();
 
 // Acabem el programa
 process.exit(0);
