@@ -1,3 +1,4 @@
+import { addMunicipiGeoDB } from './lib/database/dbUtils.js';
 import { computGlobal } from './lib/getRoutes.js';
 
 const main = async () => {
@@ -5,6 +6,4 @@ const main = async () => {
 };
 
 const result = await main();
-for(let i = 0; i < result.length; i++) {
-  console.log(result[i]);
-}
+
