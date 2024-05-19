@@ -6,19 +6,16 @@ Team: Genís Carretero Ferrete & Pau Serrat Gutiérrez
 # Project Structure
 Directories and Files
 `mapsAPI.js`: Contains functions for interacting with the Google Maps API to process the data, get distances & more useful information.
-database/dbUtils.js: Contains functions for retrieving data from the database, including starting points and municipality information.
-CE-db-migrations.sql: SQL script for setting up and migrating the database.
-1_Template_Challenges_-_UABTH_-_Caixa_Enginyers.docx: Document with challenge details.
-Lot_2_Municipis.pdf, Lot_4_Municipis.pdf, Lot_5_Municipis.pdf: PDFs with detailed information about the municipalities in different lots.
-Dades_Municipis.xlsx: Excel file with data on municipalities.
-Presentacio_CE_Repte_Hack.pptx: PowerPoint presentation with project background and requirements.
-Key Functions
-computGlobal()
+`database/dbUtils.js`: Contains functions for retrieving data from the database.
+`CE-db-migrations.sql`: SQL script for setting up and migrating the database
+
+# Key Functions
+`computGlobal()`
 This is the main function that calculates optimal routes for the mobile financial service. It performs the following steps:
 
-Initialization: Sets working hours, truck velocity, and other parameters.
+- Initialization: Sets working hours, truck velocity, and other parameters.
 Loading Data: Loads municipality data and starting points from the database.
-Route Computation: Iteratively computes routes considering constraints like maximum municipalities per day and working hours.
+- Route Computation: Iteratively computes routes considering constraints like maximum municipalities per day and working hours.
 Output: Converts the computed routes to a JSON format.
 carregaLots()
 Loads the municipalities for each lot and block from the database.
