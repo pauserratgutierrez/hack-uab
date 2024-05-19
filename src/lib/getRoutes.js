@@ -49,9 +49,9 @@ export const computGlobal = async () => {
       }
 
       const distanceInfo = await getDistance(currentPoint.municipiInfo, startingPoint.municipiInfo);
-      if (notVisited.size == 0 || path.elements.length >= maxNumMunicipisDia || currentTime + distanceInfo.distance/truckVel > workingHours) {
+      if (notVisited.size == 0 || path.elements.length >= maxNumMunicipisDia || currentTime + distanceInfo/truckVel > workingHours) {
         abort = true;
-        path.time = currentTime + distanceInfo.distance/truckVel;
+        path.time = currentTime + distanceInfo/truckVel;
         return;
       }
       const nearby = await getMunicipisGeoOrderedByDistanceDB(currentPoint.municipiId, j+1);
@@ -61,11 +61,11 @@ export const computGlobal = async () => {
           const toNearbyDistance = await getDistance(currentPoint.municipiInfo, nearby[l].municipiInfo);
           const backToStartDistance = await getDistance(nearby[l].municipiInfo, startingPoint.municipiInfo);
 
-          const totalTime = parseFloat(currentTime + toNearbyDistance.distance/truckVel + backToStartDistance.distance/truckVel);
+          const totalTime = parseFloat(currentTime + toNearbyDistance/truckVel + backToStartDistance/truckVel);
           if (totalTime > workingHours) {
             continue;
           }
-          const time = parseFloat(toNearbyDistance.distance/truckVel + currentPoint.estanciaMin);
+          const time = parseFloat(toNearbyDistance/truckVel + currentPoint.estanciaMin);
                 
           notVisited.delete(nearby[l].municipiInfo);
           path.elements.push(nearby[l]);
