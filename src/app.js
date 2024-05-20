@@ -1,4 +1,4 @@
-import { mainCalcularRuta } from './lib/routes/mainCalcularRuta.js';
+import { calcularRuta } from './lib/routes/calcularRuta.js';
 import { formatRouteDataJSON, formatRouteDataNice } from './lib/routes/formatData.js';
 
 async function main() {
@@ -10,7 +10,7 @@ async function main() {
 
   console.log(`Calculant la millor ruta...\nDescans: ${restingHours}h, Marge: ${marginHours}h, Velocitat mitjana: ${truckVel}km/h, Màxim municipis diari: ${maxNumMunicipisDia}, Lots carregats: ${numLots}`);
 
-  const data = await mainCalcularRuta(restingHours, marginHours, truckVel, maxNumMunicipisDia, numLots);
+  const data = await calcularRuta(restingHours, marginHours, truckVel, maxNumMunicipisDia, numLots);
 
   const dataJSON = formatRouteDataJSON(data); // Initial data returned and formated
   const dataNice = formatRouteDataNice(dataJSON); // Formated data for a better visualization

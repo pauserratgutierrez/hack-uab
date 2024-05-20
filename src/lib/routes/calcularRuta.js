@@ -2,7 +2,7 @@ import { addCacheDB, getCacheDB, getStartingPointsDB } from '../database/dbUtils
 import { carregaLots } from './carregaLots.js';
 import { getRoutes } from './getRoutes.js';
 
-export const mainCalcularRuta = async (restingHours, marginHours, truckVel, maxNumMunicipisDia, numLots) => {
+export const calcularRuta = async (restingHours, marginHours, truckVel, maxNumMunicipisDia, numLots) => {
   // Personalize some values for the specific execution case
   const workingHours = 8 - restingHours - marginHours;
 
