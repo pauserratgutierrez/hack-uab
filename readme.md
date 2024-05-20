@@ -10,7 +10,7 @@ Directories and Files
 `CE-db-migrations.sql`: SQL script for setting up and migrating the database
 
 # Key Functions
-`computGlobal()`
+`calcularRuta()`
 This is the main function that calculates optimal routes for the mobile financial service.
 
 # Usage Prerequisites
