@@ -5,10 +5,10 @@ export const formatRouteDataJSON = (data) => {
     if (!groupedData[lot]) groupedData[lot] = {};
     if (!groupedData[lot][bloc]) groupedData[lot][bloc] = {};
     if (!groupedData[lot][bloc][dia]) groupedData[lot][bloc][dia] = [];
-    const detailedMunicipis = municipis.map(({ municipiGeo: { latitude, longitude }, municipiId, municipiInfo, pobTotalNum, estanciaMin }) => ({
-      municipiId,
-      municipiGeo: { latitude, longitude },
-      municipiInfo,
+    const detailedMunicipis = municipis.map(({ id, info, geo: { latitude, longitude }, pobTotalNum, estanciaMin }) => ({
+      id,
+      info,
+      geo: { latitude, longitude },
       pobTotalNum,
       estanciaMin
     }));
@@ -19,7 +19,7 @@ export const formatRouteDataJSON = (data) => {
 };
 
 // Formats the data in a more readable way suitable for a console output
-export const formatOutputNicely = (data) => {
+export const formatRouteDataNice = (data) => {
   const output = [];
 
   output.push(`\n--------------------------\nOrganització de les rutes:\n     Caixa Enginyers\n--------------------------\n`);
@@ -29,12 +29,12 @@ export const formatOutputNicely = (data) => {
       output.push(`Setmana ${bloc}`);
       for (const dia in data[lot][bloc]) {
         data[lot][bloc][dia].forEach(({ tempsRuta, municipis }) => {
-          const ruta = municipis.map(m => m.municipiInfo).join(' -> ');
+          const ruta = municipis.map(m => m.info).join(' -> ');
           output.push(`Dia ${parseInt(dia) + 1}: (${tempsRuta.toFixed(2)}h) | ${ruta}`);
         });
-      }
-    }
-  }
-
+      };
+    };
+  };
+  
   return output.join('\n');
 };
