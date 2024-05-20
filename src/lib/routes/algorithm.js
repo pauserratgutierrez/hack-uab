@@ -29,8 +29,7 @@ export const computeRoute = async (i, j, notVisited, startingPoint, currentPoint
       if (notVisited.has(nearby[l].municipiInfo)) {
         const toNearbyDistance = await getDistance(currentPoint.municipiInfo, nearby[l].municipiInfo);
         const backToStartDistance = await getDistance(nearby[l].municipiInfo, startingPoint.municipiInfo);
-        // console.log(`${currentPoint.municipiInfo} -> ${nearby[l].municipiInfo} (${Math.round(toNearbyDistance)}km)`);
-        // console.log(`${nearby[l].municipiInfo} -> ${startingPoint.municipiInfo} (${Math.round(backToStartDistance)}km)`);
+        console.log(`${currentPoint.municipiInfo} -> ${nearby[l].municipiInfo} (${Math.round(toNearbyDistance)}km) | ${nearby[l].municipiInfo} -> ${startingPoint.municipiInfo} (${Math.round(backToStartDistance)}km)`);
 
         const totalTime = parseFloat(currentTime + toNearbyDistance/truckVel + backToStartDistance/truckVel);
         if (totalTime > workingHours) continue;
