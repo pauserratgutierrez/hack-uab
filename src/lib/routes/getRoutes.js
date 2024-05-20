@@ -1,6 +1,6 @@
 import { computeRoute } from './algorithm.js';
 
-export const getRoutes = async (lots, startingPoints, workingHours, truckVel, maxNumMunicipisDia, numLots, distanceCache) => {
+export const getRoutes = async (lots, startingPoints, workingDays, workingHours, truckVel, maxNumMunicipisDia, numLots, distanceCache) => {
   const routes = [];
   // Loop through each lot
   for (let i = 0; i < lots.length; ++i) {
@@ -12,7 +12,7 @@ export const getRoutes = async (lots, startingPoints, workingHours, truckVel, ma
         notVisited.add(lots[i][j][k].municipiInfo);
       };
 
-      for (let k = 0; k < 5; ++k) {
+      for (let k = 0; k < workingDays; ++k) {
         const path = {elements: [], time: 0};
         await computeRoute(i, j, notVisited, startingPoints[i], startingPoints[i], 0, workingHours, truckVel, path, maxNumMunicipisDia, distanceCache);  
 
