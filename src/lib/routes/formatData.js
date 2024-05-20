@@ -24,13 +24,13 @@ export const formatOutputNicely = (data) => {
 
   output.push(`\n--------------------------\nOrganització de les rutes:\n     Caixa Enginyers\n--------------------------\n`);
   for (const lot in data) {
-    output.push(`Ruta per al Lot ${lot}`); // Add: Show lot name
+    output.push(`Ruta per al Lot ${lot}`); // Add: Show lot name ?
     for (const bloc in data[lot]) {
       output.push(`Setmana ${bloc}`);
       for (const dia in data[lot][bloc]) {
         data[lot][bloc][dia].forEach(({ tempsRuta, municipis }) => {
           const ruta = municipis.map(m => m.municipiInfo).join(' -> ');
-          output.push(`Dia ${parseInt(dia) + 1} -> Jornada: ${tempsRuta.toFixed(2)}h | Ruta: ${ruta}`);
+          output.push(`Dia ${parseInt(dia) + 1}: (${tempsRuta.toFixed(2)}h) | ${ruta}`);
         });
       }
     }
