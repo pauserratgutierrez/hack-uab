@@ -12,8 +12,8 @@ async function main() {
 
   const data = await mainCalcularRuta(restingHours, marginHours, truckVel, maxNumMunicipisDia, numLots);
 
-  const dataJSON = formatRouteDataJSON(data);
-  const dataNice = formatRouteDataNice(dataJSON);
+  const dataJSON = formatRouteDataJSON(data); // Initial data returned and formated
+  const dataNice = formatRouteDataNice(dataJSON); // Formated data for a better visualization
 
   // console.log(JSON.stringify(dataJSON, null, 2)); // Returns the grouped data in JSON format
   console.log(dataNice); // Returns the grouped data in a nice format
