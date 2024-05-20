@@ -1,7 +1,7 @@
 # HACKATHON 2024: UAB THE HACK 🏆
 
 ## Description
-- [UAB Website](https://www.uab.cat/web/detall-de-noticia/uab-the-hack-on-es-resolen-reptes-reals-d-empreses-1345737380866.html?noticiaid=1345915849483)
+[UAB Website](https://www.uab.cat/web/detall-de-noticia/uab-the-hack-on-es-resolen-reptes-reals-d-empreses-1345737380866.html?noticiaid=1345915849483)
 This project is part of a challenge to design optimal routes for mobile financial services provided by Caixa d'Enginyers to various municipalities in Catalonia. The goal is to ensure that the routes are efficient, meet regulatory requirements, and can adapt to real-time conditions such as traffic.
 - **Start**: Saturday 18/06/2024 at 11:00h
 - **End**: Sunday 19/06/2024 at 11:45h
