@@ -21,7 +21,6 @@ export const formatRouteDataJSON = (data) => {
 // Formats the data in a more readable way suitable for a console output
 export const formatRouteDataNice = (data) => {
   const output = [];
-
   output.push(`\n--------------------------\nOrganització de les rutes:\n     Caixa Enginyers\n--------------------------\n`);
   for (const lot in data) {
     output.push(`Ruta per al Lot ${lot}`); // Add: Show lot name ?
@@ -35,6 +34,6 @@ export const formatRouteDataNice = (data) => {
       };
     };
   };
-  
+
   return output.join('\n');
 };
