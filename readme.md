@@ -1,5 +1,5 @@
 # HACKATHON 2024: UAB THE HACK 🏆
-- [Official UAB Page](https://www.uab.cat/web/detall-de-noticia/uab-the-hack-on-es-resolen-reptes-reals-d-empreses-1345737380866.html?noticiaid=1345915849483)
+- [UAB Website](https://www.uab.cat/web/detall-de-noticia/uab-the-hack-on-es-resolen-reptes-reals-d-empreses-1345737380866.html?noticiaid=1345915849483)
 - **Start**: Saturday 18/06/2024 at 11:00h
 - **End**: Sunday 19/06/2024 at 11:45h
 - **Team Members**: Genís Carretero Ferrete & Pau Serrat Gutiérrez
