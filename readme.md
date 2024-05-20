@@ -8,9 +8,9 @@ This project is part of a challenge to design optimal routes for mobile financia
 
 ## Project Structure
 Directories and Files
-`mapsAPI.js`: Contains functions for interacting with the Google Maps API to process the data, get distances & more useful information.
-`database/dbUtils.js`: Contains functions for retrieving data from the database.
-`CE-db-migrations.sql`: SQL script for setting up and migrating the database
+- `mapsAPI.js`: Contains functions for interacting with the Google Maps API to process the data, get distances & more useful information.
+- `database/dbUtils.js`: Contains functions for retrieving data from the database.
+- `CE-db-migrations.sql`: SQL script for setting up and migrating the database
 
 ## Usage Prerequisites
 - Node.js
@@ -24,4 +24,4 @@ Directories and Files
 - Ensure the MySQL database populated and running. Using the `CE-db-migrations.sql` migration file to initialise & populate it.
 
 ## Running the Project
-Run the main script with `npm run start`
+- Run the main script with `npm run start`
