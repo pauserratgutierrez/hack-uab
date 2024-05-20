@@ -1,7 +1,12 @@
+## HACKATHON 2024: UAB THE HACK 🏆
+- Start: Saturday 18/06/2024 at 11:00h
+- End: Sunday 19/06/2024 at 11:45h
+- Team Members:
+-- Genís Carretero Ferrete
+-- Pau Serrat Gutiérrez
+
 # Description
 This project is part of a challenge to design optimal routes for mobile financial services provided by Caixa d'Enginyers to various municipalities in Catalonia. The goal is to ensure that the routes are efficient, meet regulatory requirements, and can adapt to real-time conditions such as traffic.
-
-- Team: **Genís Carretero Ferrete** & **Pau Serrat Gutiérrez**
 
 # Project Structure
 Directories and Files
