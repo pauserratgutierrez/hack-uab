@@ -7,10 +7,12 @@
 This project is part of a challenge to design optimal routes for mobile financial services provided by Caixa d'Enginyers to various municipalities in Catalonia. The goal is to ensure that the routes are efficient, meet regulatory requirements, and can adapt to real-time conditions such as traffic.
 
 ## Project Structure
-Directories and Files
-- `mapsAPI.js`: Contains functions for interacting with the Google Maps API to process the data, get distances & more useful information.
-- `database/dbUtils.js`: Contains functions for retrieving data from the database.
-- `CE-db-migrations.sql`: SQL script for setting up and migrating the database
+- `app.js`: Main entry point.
+- `src/`: Main folder containing the node.js logic code.
+- `src/lib/maps/mapsAPI.js`: Contains functions for interacting with the Google Maps API to process the data, get distances & more useful information.
+- `src/lib/database/dbUtils.js`: Contains functions for retrieving data from the database.
+- `src/lib/routes`: Contains additional files for the main Back Tracking algorithm and more.
+- `CE-db-migrations.sql`: SQL script for setting up and migrating the database.
 
 ## Usage Prerequisites
 - Node.js
