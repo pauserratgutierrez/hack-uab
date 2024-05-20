@@ -1,42 +1,14 @@
-import { calcularRuta, formatRouteDataJSON, formatOutputNicely } from './lib/getRoutes.js';
-
-// ANTERIOR
-// const main = async () => {
-//   const data = await computGlobal();
-//   for (let i = 0; i < data.length; ++i) {
-//     const {lot, bloc, dia, tempsRuta, distanciaRuta} = data[i];
-//     const municipis = [];
-//     for(let j = 0; j < data[i].municipis.length; ++j){
-//       const { latitude, longitude } = data[i].municipis[j].municipiGeo;
-//       const { municipiId, municipiInfo, pobTotalNum, estanciaMin} = data[i].municipis[j];
-//       municipis.push({municipiId, latitude, longitude, municipiInfo, pobTotalNum, estanciaMin});
-//     }
-//     console.log({ lot, bloc, dia, tempsRuta, distanciaRuta, municipis });
-//   }
-
-//   for (let i = 0; i < data.length; ++i) {
-//     const {lot, bloc, dia, tempsRuta, distanciaRuta} = data[i];
-//     console.log(`lot: ${lot}, setmana: ${bloc}`);
-//     console.log(`dia: ${dia}`);
-//     console.log(`durada jornada: ${tempsRuta}`);
-//     process.stdout.write('municipis: ')
-//     for(let j = 0; j < data[i].municipis.length; ++j){
-//       if(j > 0) process.stdout.write(' -> ');
-
-//       const municipiInfo = data[i].municipis[j].municipiInfo;
-//       process.stdout.write(municipiInfo);
-      
-//     }
-//     console.log('\n');
-//   }
-// };
-
-// await main().then(() => {
-//   process.exit(0);
-// });
+import { calcularRuta } from './lib/routes/calcularRuta.js';
+import { formatRouteDataJSON, formatOutputNicely } from './lib/routes/formatData.js';
 
 const main = async () => {
-  const dataJSON = await calcularRuta();
+  const restingHours = 1;
+  const marginHours = 0.5;
+  const truckVel = 75; // Truck velocity (km/h)
+  const maxNumMunicipisDia = 9; // Maximum number of municipalities to visit in a day
+  const numLots = [2, 4, 5];
+
+  const dataJSON = await calcularRuta(restingHours, marginHours, truckVel, maxNumMunicipisDia, numLots);
   const dataNice = formatRouteDataJSON(dataJSON);
 
   console.log(JSON.stringify(dataJSON, null, 2)); // Returns the grouped data in JSON format
