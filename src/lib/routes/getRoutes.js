@@ -14,6 +14,7 @@ export const getRoutes = async (lots, startingPoints, workingDays, workingHours,
 
       for (let k = 0; k < workingDays; ++k) {
         const path = {elements: [], time: 0};
+        global.abort = false;
         await computeRoute(i, j, notVisited, startingPoints[i], startingPoints[i], 0, workingHours, truckVel, path, maxNumMunicipisDia, distanceCache);  
 
         routes.push({

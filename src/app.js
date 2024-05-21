@@ -2,11 +2,12 @@ import { calcularRuta } from './lib/routes/calcularRuta.js';
 import { formatRouteDataJSON, formatRouteDataNice } from './lib/routes/formatData.js';
 
 async function main() {
+
   const workingDays = 5; // Working days per week
   
   const workdayHours = 8; // Working hours per day
-  const restingHours = 0; // Resting hours per day, additional to the margin hours and commuting time!
-  const marginHours = 0; // Margin hours per day
+  const restingHours = 1; // Resting hours per day, additional to the margin hours and commuting time!
+  const marginHours = 0.5; // Margin hours per day
   
   const truckVel = 75; // Truck velocity (km/h)
   const maxNumMunicipisDia = 10; // Maximum number of municipalities to visit in a day. If this is too low, the algorithm may not find a solution!
