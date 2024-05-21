@@ -36,7 +36,6 @@ export const computeRoute = async (i, j, notVisited, startingPoint, currentPoint
       // Previously, abort flag was set to true here. Now it is passed as a parameter to the function
       path.time = currentTime + parseFloat(distanceInfo/truckVel);
       global.abort = true;
-      if(i == 2 && j == 3) console.log("path", path.time, typeof path.time);
       return;
     }
     const nearby = await getMunicipisGeoOrderedByDistanceDB(currentPoint.municipiId, j+1);
