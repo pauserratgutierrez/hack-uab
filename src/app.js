@@ -10,7 +10,7 @@ async function main() {
   const marginHours = 0.5; // Margin hours per day
   
   const truckVel = 75; // Truck velocity (km/h)
-  const maxNumMunicipisDia = 10; // Maximum number of municipalities to visit in a day. If this is too low, the algorithm may not find a solution!
+  const maxNumMunicipisDia = 10; // Maximum number of municipalities to visit in a day. If this is too low, the algorithm may not find a solution! If it's to high, it will be that much optimal that even fridays will be resting days!
   const numLots = [2, 4, 5];
 
   console.log(`Calculant la millor ruta...\nTreball: ${workingDays}d/setmana, Jornada Laboral: ${workdayHours}h/dia, Descans: ${restingHours}h/dia, Marge: ${marginHours}h/dia, Velocitat mitjana: ${truckVel}km/h, Límit municipis: ${maxNumMunicipisDia}/dia, Lots carregats: ${numLots}`);
