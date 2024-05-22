@@ -23,6 +23,12 @@
 - Clone the repository
 - Install dependencies `npm i`
 - Have a correctly populated '.env' file located on the main `/src` directory.
+GOOGLE_MAPS_API_KEY=paste-here
+DB_HOST=localhost
+DB_USER=root
+DB_PASSWORD=root
+DB_DATABASE=caixa_enginyers
+DB_PORT=3306
 - Ensure the MySQL database populated and running. Using the `CE-db-migrations.sql` migration file to initialise & populate it.
 
 ## Running the Project
