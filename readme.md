@@ -17,7 +17,7 @@
 ## Usage Prerequisites
 - Node.js
 - MySQL
-- Google Maps API Key
+- Google Maps API Key (distancematrix & geocode enabled)
 
 ## Installation
 - Clone the repository
